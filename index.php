@@ -1,7 +1,11 @@
+<?php
+    require_once('includes/functions.inc.php')
+?>
 <!DOCTYPE html>
 <html>
 
 <head>
+<title>Address Book</title>
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
@@ -66,116 +70,53 @@
                 </thead>
 
                 <tbody>
+
+<?php
+
+$no_of_records_per_page = 3;
+if(isset($_GET['page']))
+{
+    $page = $_GET['page'];
+}
+else
+{
+    $page = 1;
+}
+
+$offset = ($page - 1) * $no_of_records_per_page;
+$sql = "SELECT COUNT(*) AS total_rows FROM contacts";
+$rows = db_select($sql);
+
+$total_rows = $rows[0]['total_rows'];
+
+$total_pages = ceil($total_rows/$no_of_records_per_page);
+
+$sql = "SELECT * FROM contacts LIMIT $offset, $no_of_records_per_page";
+$rows = db_select($sql);
+if($rows === false)
+{
+    $error = db_error();
+    dd($error);
+}
+
+
+foreach($rows as $row):
+?>
+
                     <tr>
-                        <td><img class="circle" src="images/users/pedro-chapman.jpg" alt="" height="60%"></td>
-                        <td>Pedro Chapman</td>
-                        <td>pedro.chapman@example.com</td>
-                        <td>1/4/1952</td>
-                        <td>(107)-138-3450</td>
-                        <td>5750 Poplar Dr</td>
+                        <td><img class="circle" src="images/users/<?= $row['image_name']?>" alt="" height="60%"></td>
+                        <td><?= $row['first_name'] . " " . $row['last_name']?></td>
+                        <td><?= $row['email']?></td>
+                        <td><?= $row['birthdate']?></td>
+                        <td><?= $row['telephone']?></td>
+                        <td><?= $row['address']?></td>
                         <td><a class="btn btn-floating green lighten-2"><i class="material-icons">edit</i></a></td>
                         <td><a class="btn btn-floating red lighten-2 modal-trigger" href="#deleteModal"><i class="material-icons">delete_forever</i></a>
                         </td>
                     </tr>
-                    <tr>
-                        <td><img class="circle" src="images/users/jesus-gutierrez.jpg" alt="" height="60%"></td>
-                        <td>Jesus Gutierrez</td>
-                        <td>jesus.gutierrez@example.com</td>
-                        <td>6/6/1965</td>
-                        <td>(054)-990-7792</td>
-                        <td>5567 Marsh Ln</td>
-                        <td><a class="btn btn-floating green lighten-2"><i class="material-icons">edit</i></a></td>
-                        <td><a class="btn btn-floating red lighten-2 modal-trigger" href="#deleteModal"><i class="material-icons">delete_forever</i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img class="circle" src="images/users/marjorie-bates.jpg" alt="" height="60%"></td>
-                        <td>Marjorie Bates</td>
-                        <td>marjorie.bates@example.com</td>
-                        <td>12/3/1989</td>
-                        <td>(367)-064-9508</td>
-                        <td>1885 W Sherman Dr</td>
-                        <td><a class="btn btn-floating green lighten-2"><i class="material-icons">edit</i></a></td>
-                        <td><a class="btn btn-floating red lighten-2 modal-trigger" href="#deleteModal"><i class="material-icons">delete_forever</i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img class="circle" src="images/users/joe-sims.jpg" alt="" height="60%"></td>
-                        <td>Joe Sims</td>
-                        <td>joe.sims@example.com</td>
-                        <td>5/5/1951</td>
-                        <td>(831)-319-4391</td>
-                        <td>240 W 6th St</td>
-                        <td><a class="btn btn-floating green lighten-2"><i class="material-icons">edit</i></a></td>
-                        <td><a class="btn btn-floating red lighten-2 modal-trigger" href="#deleteModal"><i class="material-icons">delete_forever</i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img class="circle" src="images/users/jesus-gutierrez.jpg" alt="" height="60%"></td>
-                        <td>Jesus Gutierrez</td>
-                        <td>jesus.gutierrez@example.com</td>
-                        <td>6/6/1965</td>
-                        <td>(054)-990-7792</td>
-                        <td>5567 Marsh Ln</td>
-                        <td><a class="btn btn-floating green lighten-2"><i class="material-icons">edit</i></a></td>
-                        <td><a class="btn btn-floating red lighten-2 modal-trigger" href="#deleteModal"><i class="material-icons">delete_forever</i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img class="circle" src="images/users/patrick-cruz.jpg" alt="" height="60%"></td>
-                        <td>Patrick Cruz</td>
-                        <td>patrick.cruz@example.com</td>
-                        <td>11/4/1960</td>
-                        <td>(740)-692-1631</td>
-                        <td>4468 Hillcrest Rd</td>
-                        <td><a class="btn btn-floating green lighten-2"><i class="material-icons">edit</i></a></td>
-                        <td><a class="btn btn-floating red lighten-2 modal-trigger" href="#deleteModal"><i class="material-icons">delete_forever</i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img class="circle" src="images/users/hazel-montgomery.jpg" alt="" height="60%"></td>
-                        <td>Hazel Montgomery</td>
-                        <td>hazel.montgomery@example.com</td>
-                        <td>12/7/1994</td>
-                        <td>(866)-304-2483</td>
-                        <td>7669 Pecan Acres Ln</td>
-                        <td><a class="btn btn-floating green lighten-2"><i class="material-icons">edit</i></a></td>
-                        <td><a class="btn btn-floating red lighten-2 modal-trigger" href="#deleteModal"><i class="material-icons">delete_forever</i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img class="circle" src="images/users/antonio-freeman.jpg" alt="" height="60%"></td>
-                        <td>Antonio Freeman</td>
-                        <td>antonio.freeman@example.com</td>
-                        <td>2/1/1992</td>
-                        <td>(824)-225-7848</td>
-                        <td>2123 Oak Ridge Ln</td>
-                        <td><a class="btn btn-floating green lighten-2"><i class="material-icons">edit</i></a></td>
-                        <td><a class="btn btn-floating red lighten-2 modal-trigger" href="#deleteModal"><i class="material-icons">delete_forever</i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img class="circle" src="images/users/zachary-rhodes.jpg" alt="" height="60%"></td>
-                        <td>Zachary Rhodes</td>
-                        <td>zachary.rhodes@example.com</td>
-                        <td>6/5/1979</td>
-                        <td>(976)-037-3466</td>
-                        <td>1029 Washington Ave</td>
-                        <td><a class="btn btn-floating green lighten-2"><i class="material-icons">edit</i></a></td>
-                        <td><a class="btn btn-floating red lighten-2 modal-trigger" href="#deleteModal"><i class="material-icons">delete_forever</i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img class="circle" src="images/users/georgia-black.jpg" alt="" height="60%"></td>
-                        <td>Georgia Black</td>
-                        <td>georgia.black@example.com</td>
-                        <td>9/4/1986</td>
-                        <td>(588)-906-8246</td>
-                        <td>5427 Photinia Ave</td>
-                        <td><a class="btn btn-floating green lighten-2"><i class="material-icons">edit</i></a></td>
-                        <td><a class="btn btn-floating red lighten-2 modal-trigger" href="#deleteModal"><i class="material-icons">delete_forever</i></a>
-                        </td>
-                    </tr>
+<?php
+endforeach;
+?>
                 </tbody>
             </table>
         </div>
@@ -185,13 +126,17 @@
     <div class="row">
         <div class="col s12">
             <ul class="pagination">
-                <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-                <li class="active"><a href="#!">1</a></li>
-                <li class="waves-effect"><a href="#!">2</a></li>
-                <li class="waves-effect"><a href="#!">3</a></li>
-                <li class="waves-effect"><a href="#!">4</a></li>
-                <li class="waves-effect"><a href="#!">5</a></li>
-                <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+                <li class="<?= $page == 1 ? 'disabled' : '' ;?>"><a href="<?= $page <= 1 ? '#' : "?page=".($page-1)?>"><i class="material-icons">chevron_left</i></a></li>
+
+<?php
+for($i = 1; $i <= $total_pages; $i++):
+?>
+                <li class="waves-effect <?= $i == $page ? 'active' : '';?>"><a href="index.php?page=<?= $i;?>"><?=$i;?></a></li>
+<?php
+endfor
+?>
+
+                <li class="<?= $page == 1 ? 'disabled' : '' ;?>"><a href="<?= $page <= 1 ? '#' : "?page=".($page+1)?>"><i class="material-icons">chevron_right</i></a></li>
             </ul>
         </div>
     </div>
