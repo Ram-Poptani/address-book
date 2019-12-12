@@ -136,7 +136,7 @@ for($i = 1; $i <= $total_pages; $i++):
 endfor
 ?>
 
-                <li class="<?= $page == 1 ? 'disabled' : '' ;?>"><a href="<?= $page <= 1 ? '#' : "?page=".($page+1)?>"><i class="material-icons">chevron_right</i></a></li>
+                <li class="<?= $page == $total_pages ? 'disabled' : '' ;?>"><a href="<?= $page >= $total_pages ? '#' : "?page=".($page+1)?>"><i class="material-icons">chevron_right</i></a></li>
             </ul>
         </div>
     </div>
