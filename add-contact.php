@@ -1,3 +1,64 @@
+<?php
+require_once('includes/functions.inc.php');
+$error_flag = false;
+if(isset($_POST['submit'])){
+    $first_name = db_quote($_POST['first_name']);
+    $last_name = db_quote($_POST['last_name']);
+    $email = db_quote($_POST['email']);
+
+    $birthdate = db_quote($_POST['birthdate']);
+    $birthdate = date('Y-m-d', strtotime($birthdate));
+
+    $telephone = db_quote($_POST['telephone']);
+    $address = db_quote($_POST['address']);
+
+    /**
+     * HANDLING THE IMAGE UPLOAD
+     */
+    $image_name = strtolower($first_name . "-" . $last_name);
+
+    if(isset($_FILES['pic']['name'])){
+        $file_name = $_FILES['pic']['name'];
+
+        $temp_file_path = $_FILES['pic']['tmp_name'];
+
+        $temp = explode('.', $file_name);
+        $extension = end($temp);
+
+        $image_name .= ".$extension";
+
+        move_uploaded_file($temp_file_path, "images/users/$image_name");
+    }
+
+    /**
+     * END OF FILE UPLOADS
+     */
+    /**
+     * Saving Data to DB
+     */
+
+    $first_name = add_single_quotes($first_name);
+    $last_name = add_single_quotes($last_name);
+    $email = add_single_quotes($email);
+    $birthdate = add_single_quotes($birthdate);
+    $telephone = add_single_quotes($telephone);
+    $address = add_single_quotes($address);
+    $image_name = add_single_quotes($image_name);
+
+    $query = "INSERT INTO contacts(first_name, last_name, email, birthdate, telephone, address, image_name) VALUES ($first_name, $last_name, $email, $birthdate, $telephone, $address, $image_name)";
+    // dd($query);
+    $result = db_query($query);
+    if($result)
+    {
+        redirect("index.php?q=success&op=insert");
+    }
+    else
+    {
+        $error_flag = true;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -44,33 +105,20 @@
             <h2>Add New Contact</h2>
         </div>
         <div class="row">
-            <div class="materialert">
-                <i class="material-icons">check_circle</i> <span>Bienvenido, Linebeck</span>
-                <button type="button" class="close-alert">×</button>
-            </div>
-            <div class="materialert info">
-                <div class="material-icons">info_outline</div>
-                Oh! What a beautiful alert :)
-                <button type="button" class="close-alert">×</button>
-            </div>
+<?php
+if($error_flag):
+?>
             <div class="materialert error">
                 <div class="material-icons">error_outline</div>
                 Oh! What a beautiful alert :)
                 <button type="button" class="close-alert">×</button>
             </div>
-            <div class="materialert success">
-                <div class="material-icons">check</div>
-                Oh! What a beautiful alert :)
-                <button type="button" class="close-alert">×</button>
-            </div>
-            <div class="materialert warning">
-                <div class="material-icons">warning</div>
-                Oh! What a beautiful alert :)
-                <button type="button" class="close-alert">×</button>
-            </div>
+<?php
+endif;
+?>            
         </div>
         <div class="row">
-            <form class="col s12 formValidate" action="" id="add-contact-form" method="POST" enctype="multipart/form-data">
+            <form class="col s12 formValidate" action="<?=$_SERVER['PHP_SELF'];?>" id="add-contact-form" method="POST" enctype="multipart/form-data">
                 <div class="row mb10">
                     <div class="input-field col s6">
                         <input id="first_name" name="first_name" type="text" class="validate" data-error=".first_name_error">
@@ -121,7 +169,7 @@
                         <div class="pic_error "></div>
                     </div>
                 </div>
-                <button class="btn waves-effect waves-light right" type="submit" name="action">Submit
+                <button class="btn waves-effect waves-light right" type="submit" name="submit">Submit
                         <i class="material-icons right">send</i>
                     </button>
             </form>

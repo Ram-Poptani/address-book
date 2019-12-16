@@ -52,3 +52,13 @@ function dd($variable)
 {
     die(var_dump($variable));
 }
+
+function add_single_quotes($variable)
+{
+    return "'$variable'";
+}
+
+function redirect($url)
+{
+    header("location: $url");
+}

@@ -45,7 +45,7 @@
     <!-- Add a New Contact Link-->
     <div class="row mt50">
         <div class="col s12 right-align">
-            <a class="btn waves-effect waves-light blue lighten-2" href="add-contact.html"><i
+            <a class="btn waves-effect waves-light blue lighten-2" href="add-contact.php"><i
                     class="material-icons left">add</i> Add
                 New</a>
         </div>
@@ -73,7 +73,7 @@
 
 <?php
 
-$no_of_records_per_page = 3;
+$no_of_records_per_page = 20;
 if(isset($_GET['page']))
 {
     $page = $_GET['page'];
@@ -170,6 +170,31 @@ endfor
     <script src="js/pages/home.js"></script>
     <!--Custom JS-->
     <script src="js/custom.js" type="text/javascript"></script>
+
+    <script>
+        <?php
+        $q  =   '';
+        $op =   '';
+        if(isset($_GET['q'])){
+            $q  =   $_GET['q'];
+        }
+
+        if(isset($_GET['op'])){
+            $op =   $_GET['op'];
+        }
+
+        if($q==='success' && $op==='insert'):
+        ?>
+            let toastHTML = "<span>Contact created Successfully!</span>";
+            let classList = "green darken-1";
+        <?php
+        endif;
+        ?>
+        M.toast({
+            html    :   toastHTML,
+            classes :   classList
+        });
+    </script>
 </body>
 
 </html>
